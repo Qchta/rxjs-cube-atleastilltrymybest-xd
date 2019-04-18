@@ -8,7 +8,7 @@ import Qbee from './qbee'
 const p5 = new P5(function (p5) {
 
   
-let b = new Qbee(p5, 0, 0, 0, 50);
+  let b: Qbee = {p5:p5, x:0, y:0, z:0, size:50}
 
   p5.setup = () => {
     p5.createCanvas(400, 400, p5.WEBGL);
@@ -20,7 +20,7 @@ let b = new Qbee(p5, 0, 0, 0, 50);
     p5.background(200);
     p5.rotateX(p5.frameCount * 0.01);
     p5.rotateY(p5.frameCount * 0.01);
-    p5.box(50);
+    b.draw();
   }
 })
 
