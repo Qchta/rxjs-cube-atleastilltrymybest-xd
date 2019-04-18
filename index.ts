@@ -13,12 +13,12 @@ const p5 = new P5(function (p5) {
     p5.frameRate(60);
 
     cube = new Array(dim);
-    for(let i in [cube]) {
+    for(let i = 0; i < dim; i++) {
       cube[i] = new Array(dim);
-      for(let j in cube[i]) {
+      for(let j = 0; j < dim; j++) {
         cube[i][j] = new Array(dim);
-        for(let k in cube[j]) {
-          cube[i][j][k] = new Qbee(p5, Number(i), Number(j), Number(k), 50);
+        for(let k = 0; k < dim; k++) {
+          cube[i][j][k] = new Qbee(p5, i, j, k, 50);
         }
       }
     }
@@ -28,6 +28,13 @@ const p5 = new P5(function (p5) {
     p5.background(200);
     p5.rotateX(p5.frameCount * 0.01);
     p5.rotateY(p5.frameCount * 0.01);
+    for(let i = 0; i < dim; i++) {
+      for(let j = 0; j < dim; j++) {
+        for(let k = 0; k < dim; k++) {
+          cube[i][j][k].
+        }
+      }
+    }
   }
 })
 
