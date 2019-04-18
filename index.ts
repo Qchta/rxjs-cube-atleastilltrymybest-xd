@@ -31,7 +31,7 @@ const p5 = new P5(function (p5) {
     for(let i = 0; i < dim; i++) {
       for(let j = 0; j < dim; j++) {
         for(let k = 0; k < dim; k++) {
-          cube[i][j][k].
+          cube[i][j][k].draw();
         }
       }
     }
