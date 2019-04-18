@@ -20,12 +20,12 @@ const p5 = new P5(function (p5) {
         cube[i][j] = new Array(dim);
         for(let k = 0; k < dim; k++) {
           cube[i][j][k] = new Qbee(p5, i, j, k, 50, {
-            isUp: y === 0,
-            isDown: true,
-            isFront: k === 0,
-            isBack: true,
-            isRight: true,
-            isLeft: true
+            isUp: j === 0,
+            isDown: j === dim -1,
+            isFront: k === dim - 1,
+            isBack: k === 0,
+            isRight: i === dim -1,
+            isLeft: i === 0
           });
         }
       }
