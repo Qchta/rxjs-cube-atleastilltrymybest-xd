@@ -10,7 +10,8 @@ const p5 = new P5(function (p5) {
 
   p5.setup = () => {
     p5.createCanvas(400, 400, p5.WEBGL);
-    p5.frameRate(60);
+    p5.frameRate(30);
+    p5.smooth();
 
     cube = new Array(dim);
     for(let i = 0; i < dim; i++) {
@@ -18,7 +19,14 @@ const p5 = new P5(function (p5) {
       for(let j = 0; j < dim; j++) {
         cube[i][j] = new Array(dim);
         for(let k = 0; k < dim; k++) {
-          cube[i][j][k] = new Qbee(p5, i, j, k, 50);
+          cube[i][j][k] = new Qbee(p5, i, j, k, 50, {
+            isUp: y === 0,
+            isDown: true,
+            isFront: k === 0,
+            isBack: true,
+            isRight: true,
+            isLeft: true
+          });
         }
       }
     }
