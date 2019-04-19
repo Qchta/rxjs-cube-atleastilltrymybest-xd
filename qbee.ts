@@ -1,4 +1,4 @@
-import { P5, PMatrix3D } from 'p5'
+import P5 from 'p5'
 
 export interface QbeePurpose {
   isUp: boolean;
@@ -11,29 +11,33 @@ export interface QbeePurpose {
 
 export class Qbee {
 
+  private initailState;
+
   constructor(
     private p5: P5,
     private x: number,
     private y: number,
     private z: number,
     private purpose: QbeePurpose
-  ) {}
+  ) {
+    this.initailState = { x: x, y: y, z: z };
+  }
 
   public draw() {
     this.p5.push();
-    this.p5.stroke(6);
+    // if (this.purpose.isUp) this.p5.rotateY(-this.p5.HALF_PI);
     this.p5.translate(this.x, this.y, this.z);
-    if(this.purpose.isUp) this.drawUp();
-    if(this.purpose.isDown) this.drawDown();
-    if(this.purpose.isFront) this.drawFront();
-    if(this.purpose.isBack) this.drawBack();
-    if(this.purpose.isRight) this.drawRight();
-    if(this.purpose.isLeft) this.drawLeft();
+    if (this.purpose.isUp) this.drawUp();
+    if (this.purpose.isDown) this.drawDown();
+    if (this.purpose.isFront) this.drawFront();
+    if (this.purpose.isBack) this.drawBack();
+    if (this.purpose.isRight) this.drawRight();
+    if (this.purpose.isLeft) this.drawLeft();
     this.p5.pop();
   }
 
   private drawFront() {
-    let r = 1;
+    let r = 0.5;
     this.p5.beginShape();
     this.p5.fill('Green');
     this.p5.vertex(r, r, r);
@@ -44,7 +48,7 @@ export class Qbee {
   }
 
   private drawBack() {
-    let r = 1;
+    let r = 0.5;
     this.p5.beginShape();
     this.p5.fill('DodgerBlue');
     this.p5.vertex(r, r, -r);
@@ -55,7 +59,7 @@ export class Qbee {
   }
 
   private drawRight() {
-    let r = 1;
+    let r = 0.5;
     this.p5.beginShape();
     this.p5.fill('Red');
     this.p5.vertex(r, r, r);
@@ -66,7 +70,7 @@ export class Qbee {
   }
 
   private drawLeft() {
-    let r = 1;
+    let r = 0.5;
     this.p5.beginShape();
     this.p5.fill('Orange');
     this.p5.vertex(-r, r, r);
@@ -77,7 +81,7 @@ export class Qbee {
   }
 
   private drawUp() {
-    let r = 1;
+    let r = 0.5;
     this.p5.beginShape();
     this.p5.fill('White');
     this.p5.vertex(r, -r, r);
@@ -88,7 +92,7 @@ export class Qbee {
   }
 
   private drawDown() {
-    let r = 1;
+    let r = 0.5;
     this.p5.beginShape();
     this.p5.fill('Yellow');
     this.p5.vertex(r, r, r);

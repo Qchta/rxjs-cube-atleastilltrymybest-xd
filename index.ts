@@ -6,7 +6,6 @@ import './style.css'
 
 new P5(function (p5) {
 
-  const dim = 3;
   let cube: Qbee[] = [];
 
   p5.setup = () => {
@@ -14,9 +13,9 @@ new P5(function (p5) {
     p5.frameRate(30);
     p5.smooth();
 
-    for (let x = -floor(dim / 2); x <= floor(dim / 2); x++) {
-      for (let y = -floor(dim / 2); y <= floor(dim / 2); y++) {
-        for (let z = -floor(dim / 2); z <= floor(dim / 2); z++) {
+    for (let x = -1; x <= 1; x++) {
+      for (let y = -1; y <= 1; y++) {
+        for (let z = -1; z <= 1; z++) {
           cube.push(new Qbee(p5, x, y, z, {
             isUp: isOuter(y, false),
             isDown: isOuter(y, true),
@@ -39,6 +38,11 @@ new P5(function (p5) {
     cube.forEach(qbee => qbee.draw());
   }
 
+  p5.keyPressed = () => {
+    if (p5.key == 'a') console.log('a');
+    if (p5.key == 'q') console.log('q');
+  };
+
   function drawHelpers() {
     p5.push();
     p5.translate(200, 0, 0);
@@ -58,7 +62,7 @@ new P5(function (p5) {
   }
 
   function isOuter(cord: number, positive: boolean): boolean {
-    return cord === floor(dim / 2) * (positive ? 1 : -1);
+    return cord === 1 * (positive ? 1 : -1);
   }
 
 }, 'canvas')
