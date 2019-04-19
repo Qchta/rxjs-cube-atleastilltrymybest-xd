@@ -3,7 +3,7 @@ import P5 from 'p5'
 import { Qbee } from './qbee'
 
 
-const p5 = new P5(function (p5) {
+new P5(function (p5) {
 
   const dim = 3;
   let cube: Qbee[][][];
@@ -19,7 +19,7 @@ const p5 = new P5(function (p5) {
       for(let j = 0; j < dim; j++) {
         cube[i][j] = new Array(dim);
         for(let k = 0; k < dim; k++) {
-          cube[i][j][k] = new Qbee(p5, i, j, k, 50, {
+          cube[i][j][k] = new Qbee(p5, i, j, k, undefined, 50, {
             isUp: j === 0,
             isDown: j === dim -1,
             isFront: k === dim - 1,
@@ -36,7 +36,7 @@ const p5 = new P5(function (p5) {
     p5.background(200);
     p5.rotateX(p5.frameCount * 0.01);
     p5.rotateY(p5.frameCount * 0.01);
-    drawHelpers();
+    //drawHelpers();
     for(let i = 0; i < dim; i++) {
       for(let j = 0; j < dim; j++) {
         for(let k = 0; k < dim; k++) {
@@ -63,6 +63,6 @@ const p5 = new P5(function (p5) {
     p5.box(0,0,400);
     p5.pop();
   }
-})
+}, 'canvas')
 
 

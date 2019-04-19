@@ -1,4 +1,4 @@
-import P5 from 'p5'
+import { P5, PMatrix3D } from 'p5'
 
 export interface QbeePurpose {
   isUp: boolean;
@@ -16,6 +16,7 @@ export class Qbee {
     private x: number,
     private y: number,
     private z: number,
+    private position: PMatrix3D,
     private size: number,
     private purpose: QbeePurpose
   ) {}
