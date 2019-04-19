@@ -1,12 +1,13 @@
-import './style.css'
 import P5 from 'p5'
+import { abs, round, floor } from 'math'
 import { Qbee } from './qbee'
+import './style.css'
 
 
 new P5(function (p5) {
 
   const dim = 3;
-  let cube: Qbee[][][];
+  let cube: Qbee[];
 
   p5.setup = () => {
     p5.createCanvas(400, 400, p5.WEBGL);
@@ -14,19 +15,17 @@ new P5(function (p5) {
     p5.smooth();
 
     cube = new Array(dim);
-    for (let i = 0; i < dim; i++) {
-      cube[i] = new Array(dim);
-      for (let j = 0; j < dim; j++) {
-        cube[i][j] = new Array(dim);
-        for (let k = 0; k < dim; k++) {
-          cube[i][j][k] = new Qbee(p5, i, j, k, undefined, 50, {
-            isUp: j === 0,
-            isDown: j === dim - 1,
-            isFront: k === dim - 1,
-            isBack: k === 0,
-            isRight: i === dim - 1,
-            isLeft: i === 0
-          });
+    for (let x = -floor(dim / 2); x <= floor(dim / 2); x++) {
+      for (let y = -floor(dim / 2); y <= floor(dim / 2); y++) {
+        for (let z = -floor(dim / 2); z <= floor(dim / 2); z++) {
+          cube.push(new Qbee(p5, x, y, z, {
+            isUp: isOuter(y, false),
+            isDown: isOuter(y, true),
+            isFront: isOuter(z, true),
+            isBack: isOuter(z, false),
+            isRight: isOuter(x, true),
+            isLeft: isOuter(x, false)
+          }))
         }
       }
     }
@@ -36,14 +35,8 @@ new P5(function (p5) {
     p5.background(200);
     p5.rotateX(p5.frameCount * 0.01);
     p5.rotateY(p5.frameCount * 0.01);
-    //drawHelpers();
-    for (let i = 0; i < dim; i++) {
-      for (let j = 0; j < dim; j++) {
-        for (let k = 0; k < dim; k++) {
-          cube[i][j][k].draw();
-        }
-      }
-    }
+    drawHelpers();
+    cube.forEach(qbee => qbee.draw());
   }
 
   function drawHelpers() {
@@ -63,6 +56,11 @@ new P5(function (p5) {
     p5.box(0, 0, 400);
     p5.pop();
   }
+
+  function isOuter(cord: number, positive: boolean): boolean {
+    return cord === floor(dim / 2) * (positive ? 1 : -1);
+  }
+
 }, 'canvas')
 
 

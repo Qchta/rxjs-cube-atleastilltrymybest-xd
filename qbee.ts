@@ -16,8 +16,6 @@ export class Qbee {
     private x: number,
     private y: number,
     private z: number,
-    private position: PMatrix3D,
-    private size: number,
     private purpose: QbeePurpose
   ) {}
 
