@@ -22,7 +22,7 @@ export class Qbee {
   public draw() {
     this.p5.push();
     this.p5.stroke(6);
-    this.p5.translate(this.offset(this.x), this.offset(this.y), this.offset(this.z));
+    this.p5.translate(this.x, this.y, this.z);
     if(this.purpose.isUp) this.drawUp();
     if(this.purpose.isDown) this.drawDown();
     if(this.purpose.isFront) this.drawFront();
@@ -32,12 +32,8 @@ export class Qbee {
     this.p5.pop();
   }
 
-  private offset(coord: number) {
-    return (coord - 1) * this.size;
-  }
-
   private drawFront() {
-    let r = this.size/2;
+    let r = 1;
     this.p5.beginShape();
     this.p5.fill('Green');
     this.p5.vertex(r, r, r);
@@ -48,7 +44,7 @@ export class Qbee {
   }
 
   private drawBack() {
-    let r = this.size/2;
+    let r = 1;
     this.p5.beginShape();
     this.p5.fill('DodgerBlue');
     this.p5.vertex(r, r, -r);
@@ -59,7 +55,7 @@ export class Qbee {
   }
 
   private drawRight() {
-    let r = this.size/2;
+    let r = 1;
     this.p5.beginShape();
     this.p5.fill('Red');
     this.p5.vertex(r, r, r);
@@ -70,7 +66,7 @@ export class Qbee {
   }
 
   private drawLeft() {
-    let r = this.size/2;
+    let r = 1;
     this.p5.beginShape();
     this.p5.fill('Orange');
     this.p5.vertex(-r, r, r);
@@ -81,7 +77,7 @@ export class Qbee {
   }
 
   private drawUp() {
-    let r = this.size/2;
+    let r = 1;
     this.p5.beginShape();
     this.p5.fill('White');
     this.p5.vertex(r, -r, r);
@@ -92,7 +88,7 @@ export class Qbee {
   }
 
   private drawDown() {
-    let r = this.size/2;
+    let r = 1;
     this.p5.beginShape();
     this.p5.fill('Yellow');
     this.p5.vertex(r, r, r);

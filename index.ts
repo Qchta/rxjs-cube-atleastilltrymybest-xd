@@ -7,14 +7,13 @@ import './style.css'
 new P5(function (p5) {
 
   const dim = 3;
-  let cube: Qbee[];
+  let cube: Qbee[] = [];
 
   p5.setup = () => {
     p5.createCanvas(400, 400, p5.WEBGL);
     p5.frameRate(30);
     p5.smooth();
 
-    cube = new Array(dim);
     for (let x = -floor(dim / 2); x <= floor(dim / 2); x++) {
       for (let y = -floor(dim / 2); y <= floor(dim / 2); y++) {
         for (let z = -floor(dim / 2); z <= floor(dim / 2); z++) {
@@ -33,6 +32,7 @@ new P5(function (p5) {
 
   p5.draw = () => {
     p5.background(200);
+    p5.scale(50);
     p5.rotateX(p5.frameCount * 0.01);
     p5.rotateY(p5.frameCount * 0.01);
     drawHelpers();
