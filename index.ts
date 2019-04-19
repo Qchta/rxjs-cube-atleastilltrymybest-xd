@@ -36,6 +36,7 @@ const p5 = new P5(function (p5) {
     p5.background(200);
     p5.rotateX(p5.frameCount * 0.01);
     p5.rotateY(p5.frameCount * 0.01);
+    drawHelpers();
     for(let i = 0; i < dim; i++) {
       for(let j = 0; j < dim; j++) {
         for(let k = 0; k < dim; k++) {
@@ -43,6 +44,24 @@ const p5 = new P5(function (p5) {
         }
       }
     }
+  }
+
+  function drawHelpers() {
+    p5.push();
+    p5.translate(200,0,0);
+    p5.stroke('red');
+    p5.box(400,0,0);
+    p5.pop();
+    p5.push();
+    p5.translate(0,200,0);
+    p5.stroke('green');
+    p5.box(0,400,0);
+    p5.pop();
+    p5.push();
+    p5.translate(0,0,200);
+    p5.stroke('blue');
+    p5.box(0,0,400);
+    p5.pop();
   }
 })
 
