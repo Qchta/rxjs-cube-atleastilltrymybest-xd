@@ -1,6 +1,8 @@
 import P5 from 'p5'
 import { abs, round, floor } from 'math'
-import { Qbee } from './qbee'
+import { of, from } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { Qbee, Side } from './qbee'
 import './style.css'
 
 
@@ -16,14 +18,8 @@ new P5(function (p5) {
     for (let x = -1; x <= 1; x++) {
       for (let y = -1; y <= 1; y++) {
         for (let z = -1; z <= 1; z++) {
-          cube.push(new Qbee(p5, x, y, z, {
-            isUp: isOuter(y, false),
-            isDown: isOuter(y, true),
-            isFront: isOuter(z, true),
-            isBack: isOuter(z, false),
-            isRight: isOuter(x, true),
-            isLeft: isOuter(x, false)
-          }))
+          // if (x === 0 || y === 0 || z === 0) continue;
+          cube.push(new Qbee(p5, x, y, z));
         }
       }
     }
@@ -32,15 +28,22 @@ new P5(function (p5) {
   p5.draw = () => {
     p5.background(200);
     p5.scale(50);
-    p5.rotateX(p5.frameCount * 0.01);
-    p5.rotateY(p5.frameCount * 0.01);
+    p5.rotateX(-p5.HALF_PI / 3);
+    p5.rotateY(-p5.HALF_PI / 3);
     drawHelpers();
     cube.forEach(qbee => qbee.draw());
   }
 
   p5.keyPressed = () => {
-    if (p5.key == 'a') console.log('a');
-    if (p5.key == 'q') console.log('q');
+    switch (p5.key) {
+      case 'f': 
+        from(cube).pipe(
+          filter(qbee => qbee.purpose.isFront),
+
+        ).forEach(qbee => qbee.move(Side.FRONT)); 
+        break;
+      case 'F': console.log('F'); break;
+    }
   };
 
   function drawHelpers() {
@@ -59,10 +62,6 @@ new P5(function (p5) {
     p5.stroke('blue');
     p5.box(0, 0, 400);
     p5.pop();
-  }
-
-  function isOuter(cord: number, positive: boolean): boolean {
-    return cord === 1 * (positive ? 1 : -1);
   }
 
 }, 'canvas')

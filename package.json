@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "math": "^0.0.3",
-    "p5": "0.8.0"
+    "math": "0.0.3",
+    "p5": "0.8.0",
+    "rxjs": "^6.4.0"
   }
 }
