@@ -1,24 +1,16 @@
 import P5 from 'p5'
 
-export interface QbeePurpose {
-  isUp: boolean;
-  isDown: boolean;
-  isFront: boolean;
-  isBack: boolean;
-  isRight: boolean;
-  isLeft: boolean;
-}
-
 export interface QbeeState {
   x: number,
   y: number,
   z: number,
   rotX: number,
   rotY: number,
-  rotZ: number
+  rotZ: number,
+  layers: Array<Layer>
 }
 
-export enum Side {
+export enum Layer {
     UP,
     DOWN,
     LEFT,
@@ -28,35 +20,33 @@ export enum Side {
 }
 
 export class Qbee {
-
-  public purpose: QbeePurpose;
   
   private initailState: QbeeState;
-  private currentState: QbeeState;
+  public currentState: QbeeState;
 
   constructor(
     private p5: P5,
-    private x: number,
-    private y: number,
-    private z: number
+    x: number,
+    y: number,
+    z: number
   ) {
+    let layers: Array<Layer> = new Array();;
+    if(isOuter(y, false))layers.push(Layer.UP);
+    if(isOuter(y, true))layers.push(Layer.DOWN);
+    if(isOuter(z, true))layers.push(Layer.FRONT);
+    if(isOuter(z, false))layers.push(Layer.BACK);
+    if(isOuter(x, true))layers.push(Layer.RIGHT);
+    if(isOuter(x, false))layers.push(Layer.LEFT);
     this.initailState = {
       x: x,
       y: y,
       z: z,
       rotX: 0,
       rotY: 0,
-      rotZ: 0
+      rotZ: 0,
+      layers: layers
     };
     this.currentState = {...this.initailState};
-    this.purpose = {
-      isUp: isOuter(y, false),
-      isDown: isOuter(y, true),
-      isFront: isOuter(z, true),
-      isBack: isOuter(z, false),
-      isRight: isOuter(x, true),
-      isLeft: isOuter(x, false)
-    }
   }
 
   public draw() {
@@ -64,13 +54,13 @@ export class Qbee {
     this.p5.rotateX(this.currentState.rotX);
     this.p5.rotateY(this.currentState.rotY);
     this.p5.rotateZ(this.currentState.rotZ);
-    this.p5.translate(this.x, this.y, this.z);
-    if (this.purpose.isUp) this.drawUp();
-    if (this.purpose.isDown) this.drawDown();
-    if (this.purpose.isFront) this.drawFront();
-    if (this.purpose.isBack) this.drawBack();
-    if (this.purpose.isRight) this.drawRight();
-    if (this.purpose.isLeft) this.drawLeft();
+    this.p5.translate(this.initailState.x, this.initailState.y, this.initailState.z);
+    if (this.initailState.layers.includes(Layer.UP)) this.drawUp();
+    if (this.initailState.layers.includes(Layer.DOWN)) this.drawDown();
+    if (this.initailState.layers.includes(Layer.FRONT)) this.drawFront();
+    if (this.initailState.layers.includes(Layer.BACK)) this.drawBack();
+    if (this.initailState.layers.includes(Layer.RIGHT)) this.drawRight();
+    if (this.initailState.layers.includes(Layer.LEFT)) this.drawLeft();
     this.p5.pop();
   }
 
@@ -140,9 +130,9 @@ export class Qbee {
     this.p5.endShape(this.p5.CLOSE);
   }
 
-  public move(side: Side) {
-    switch(side) {
-      case Side.FRONT: 
+  public move(layer: Layer) {
+    switch(layer) {
+      case Layer.FRONT: 
         this.currentState.rotZ += this.p5.HALF_PI;
     }
   }

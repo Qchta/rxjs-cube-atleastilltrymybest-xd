@@ -2,7 +2,7 @@ import P5 from 'p5'
 import { abs, round, floor } from 'math'
 import { of, from } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Qbee, Side } from './qbee'
+import { Qbee, Layer } from './qbee'
 import './style.css'
 
 
@@ -38,9 +38,9 @@ new P5(function (p5) {
     switch (p5.key) {
       case 'f': 
         from(cube).pipe(
-          filter(qbee => qbee.purpose.isFront),
+          filter(qbee => qbee.currentState.layers.includes(Layer.FRONT)),
 
-        ).forEach(qbee => qbee.move(Side.FRONT)); 
+        ).forEach(qbee => qbee.move(Layer.FRONT)); 
         break;
       case 'F': console.log('F'); break;
     }
