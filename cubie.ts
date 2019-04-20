@@ -68,7 +68,7 @@ export class Cubie {
   public rotate(axis: Axis, clockwise: boolean) {
     switch(axis) {
       case Axis.X:
-        this.currentState.rotZ += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
+        this.currentState.rotX += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
       case Axis.Y:
         this.currentState.rotY += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
       case Axis.Z:
