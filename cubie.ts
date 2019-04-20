@@ -1,6 +1,7 @@
 import P5 from 'p5'
+import { Axis } from './index'
 
-export interface QbeeState {
+export interface CubieState {
   x: number,
   y: number,
   z: number,
@@ -19,10 +20,10 @@ export enum Layer {
     BACK
 }
 
-export class Qbee {
+export class Cubie {
   
-  private initailState: QbeeState;
-  public currentState: QbeeState;
+  private initailState: CubieState;
+  public currentState: CubieState;
 
   constructor(
     private p5: P5,
@@ -62,6 +63,17 @@ export class Qbee {
     if (this.initailState.layers.includes(Layer.RIGHT)) this.drawRight();
     if (this.initailState.layers.includes(Layer.LEFT)) this.drawLeft();
     this.p5.pop();
+  }
+
+  public rotate(axis: Axis, clockwise: boolean) {
+    switch(axis) {
+      case Axis.X:
+        this.currentState.rotZ += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
+      case Axis.Y:
+        this.currentState.rotY += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
+      case Axis.Z:
+        this.currentState.rotZ += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
+    }
   }
 
   private drawFront() {
@@ -128,13 +140,6 @@ export class Qbee {
     this.p5.vertex(-r, r, -r);
     this.p5.vertex(r, r, -r);
     this.p5.endShape(this.p5.CLOSE);
-  }
-
-  public move(layer: Layer) {
-    switch(layer) {
-      case Layer.FRONT: 
-        this.currentState.rotZ += this.p5.HALF_PI;
-    }
   }
 
 }
