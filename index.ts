@@ -1,7 +1,8 @@
 import P5 from 'p5'
 import { of, from } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Cubie, Layer } from './cubie'
+import { Cubie } from './cubie'
+import { Layer } from './layer'
 import './style.css'
 
 export enum Axis {
@@ -39,46 +40,12 @@ new P5(function (p5) {
 
   p5.draw = () => {
 
-    if (p5.keyIsDown(p5.LEFT_ARROW)) {
-      rotY -= 5;
-    }
-
-    if (p5.keyIsDown(p5.RIGHT_ARROW)) {
-      rotY += 5;
-    }
-
-    if (p5.keyIsDown(p5.UP_ARROW)) {
-      rotX += 5;
-    }
-
-    if (p5.keyIsDown(p5.DOWN_ARROW)) {
-      rotX -= 5;
-    }
-
+    p5.orbitControl();
+    p5.debugMode();
     p5.background(200);
-    p5.scale(50);
-    p5.rotateX(-p5.HALF_PI / 3);
-    p5.rotateY(-p5.HALF_PI / 3);
-    p5.push();
-
-    // let sinx = p5.sin((rotX + rotXd) * 0.01);
-    // let cosx = p5.cos((rotX + rotXd) * 0.01);
-    // let siny = p5.sin((rotY + rotYd) * 0.01);
-    // let cosy = p5.cos((rotY + rotYd) * 0.01);
-
-    // p5.applyMatrix(
-    //   cosy,       0,    -siny,      0,
-    //   -sinx*siny, cosx, -sinx*cosy, 0,
-    //   cosx*siny,  sinx, cosx*cosy,  0,
-    //   0,          0,    0,          1,
-    // )
-
-    p5.rotateY((rotY + rotYd) * 0.01);
-    p5.rotateX((rotX + rotXd) * 0.01);
-
+    p5.scale(40);
     cube.forEach(qb => qb.draw());
-    p5.pop();
-    drawHelpers();
+    
   }
 
   p5.keyPressed = () => {
@@ -146,24 +113,6 @@ new P5(function (p5) {
       case Layer.RIGHT:
         return Axis.X;
     }
-  }
-
-  function drawHelpers() {
-    p5.push();
-    p5.translate(200, 0, 0);
-    p5.stroke('red');
-    p5.box(400, 0, 0);
-    p5.pop();
-    p5.push();
-    p5.translate(0, 200, 0);
-    p5.stroke('green');
-    p5.box(0, 400, 0);
-    p5.pop();
-    p5.push();
-    p5.translate(0, 0, 200);
-    p5.stroke('blue');
-    p5.box(0, 0, 400);
-    p5.pop();
   }
 
 }, 'canvas')
