@@ -74,8 +74,7 @@ new P5(function (p5) {
     // )
 
     p5.rotateY((rotY + rotYd) * 0.01);
-    p5.rotateX(p5.cos(rotY + rotYd) * p5.cos(rotY + rotYd) * (rotX + rotXd) * 0.01);
-    p5.rotateZ(p5.sin(rotY + rotYd) * p5.sin(rotY + rotYd) * (rotX + rotXd) * 0.01);
+    p5.rotateX((rotX + rotXd) * 0.01);
 
     cube.forEach(qb => qb.draw());
     p5.pop();
