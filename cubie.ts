@@ -17,6 +17,12 @@ export class Cubie {
   private initailState: CubieState;
   public currentState: CubieState;
 
+  private axises: { [key:number]:{axis: Axis, inverted: boolean}; } = {
+    0: {axis: Axis.X, inverted: false},
+    1: {axis: Axis.Y, inverted: false},
+    2: {axis: Axis.Z, inverted: false}
+  };
+
   constructor(
     private p5: P5,
     x: number,
@@ -48,24 +54,31 @@ export class Cubie {
     this.p5.rotateY(this.currentState.rotY);
     this.p5.rotateZ(this.currentState.rotZ);
     this.p5.translate(this.initailState.x, this.initailState.y, this.initailState.z);
+    this.p5.fill(0);
+    this.p5.box(0.999);
     this.initailState.layers.forEach(layer => Layer.draw(layer, this.p5));
     this.p5.pop();
   }
 
   public rotate(axis: Axis, clockwise: boolean) {
-    switch(axis) {
+    console.log(this.currentState);
+    switch(this.axises[axis].axis) {
       case Axis.X:
-        this.currentState.rotX += this.p5.HALF_PI * (clockwise ? 1 : -1);
-        this.currentState = {...this.currentState,
-          rotX: this.currentState.rotX += this.p5.HALF_PI * (clockwise ? 1 : -1),
-          layers: layers
+        this.currentState = {...this.currentState, 
+          rotX: this.currentState.rotX + this.p5.HALF_PI * (clockwise ? 1 : -1),
+          layers: this.currentState.layers.map(layer => Layer.mapWithRotation(layer, axis, clockwise))
         };
+        this.axises = {...this.axises,
+          1: this.axises[2],
+          2: this.axises[1]
+        }
         break;
       case Axis.Y:
-        this.currentState.rotY += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
+        this.currentState.rotY += this.p5.HALF_PI * (clockwise ^ this.axises.inverted ? 1 : -1); break;
       case Axis.Z:
-        this.currentState.rotZ += this.p5.HALF_PI * (clockwise ? 1 : -1); break;
+        this.currentState.rotZ += this.p5.HALF_PI * (clockwise ^ this.axises.inverted ? 1 : -1); break;
     }
+    console.log(this.currentState);
   }
 
   

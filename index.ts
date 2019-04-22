@@ -12,15 +12,7 @@ export enum Axis {
 new P5(function (p5) {
 
   let cube: Cubie[] = [];
-
-  let rotX = 0;
-  let rotY = 0;
-
-  let rotXd = 0;
-  let rotYd = 0;
-
-  let mouseX = 0;
-  let mouseY = 0;
+  let cameraOn = true;
 
   p5.setup = () => {
     p5.createCanvas(400, 400, p5.WEBGL);
@@ -30,7 +22,7 @@ new P5(function (p5) {
     for (let x = -1; x <= 1; x++) {
       for (let y = -1; y <= 1; y++) {
         for (let z = -1; z <= 1; z++) {
-          // if (y !== -1) continue;
+          // if (x !== 1) continue;
           cube.push(new Cubie(p5, x, y, z));
         }
       }
@@ -40,12 +32,12 @@ new P5(function (p5) {
 
   p5.draw = () => {
 
-    p5.orbitControl();
+    if(cameraOn) p5.orbitControl();
     p5.debugMode();
     p5.background(200);
     p5.scale(40);
     cube.forEach(qb => qb.draw());
-    
+
   }
 
   p5.keyPressed = () => {
@@ -74,25 +66,10 @@ new P5(function (p5) {
         rotate(Layer.DOWN, true); break;
       case 'D':
         rotate(Layer.DOWN, false); break;
+      case 'q':
+        cameraOn = !cameraOn
     }
   };
-
-  p5.mousePressed = () => {
-    mouseX = p5.mouseX;
-    mouseY = p5.mouseY;
-  }
-
-  p5.mouseDragged = () => {
-    rotYd = p5.mouseX - mouseX;
-    rotXd = -(p5.mouseY - mouseY);
-  }
-
-  p5.mouseReleased = () => {
-    rotY += rotYd;
-    rotX += rotXd;
-    rotYd = 0;
-    rotXd = 0;
-  }
 
   function rotate(layer: Layer, clockwise: boolean) {
     from(cube).pipe(
