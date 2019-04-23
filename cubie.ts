@@ -57,6 +57,7 @@ export class Cubie {
     this.p5.fill(0);
     this.p5.box(0.999);
     this.initailState.layers.forEach(layer => Layer.draw(layer, this.p5));
+    this.initailState.layers.forEach(layer => Layer.drawNormal(layer, this.p5));
     this.p5.pop();
   }
 

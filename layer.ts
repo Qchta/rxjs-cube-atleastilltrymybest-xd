@@ -35,7 +35,6 @@ export namespace Layer {
 
   export function draw(layer: Layer, p5: P5): void {
     p5.push();
-    p5.beginShape();
     p5.fill(color(layer));
     let norm = normal(layer, p5);
     p5.translate(norm.div(2));
@@ -46,19 +45,42 @@ export namespace Layer {
     }
     p5.noStroke();
     p5.plane(1, 1);
+    p5.pop();
+  }
 
-    p5.endShape(p5.CLOSE);
+  export function drawNormal(layer: Layer, p5: P5): void {
+    p5.push();
+    let norm = normal(layer, p5);
+    p5.translate(norm.div(2));
+
+    p5.stroke(0.01);
+    p5.box(norm.x, norm.y, norm.z);
     p5.pop();
   }
 
   export function mapWithRotation(layer: Layer, axis: Axis, clockwise: boolean): Layer {
     if (axis === Axis.X) {
-      console.log('dupa')
       switch (layer) {
         case Layer.FRONT: return clockwise ? Layer.UP : Layer.DOWN;
         case Layer.BACK: return clockwise ? Layer.DOWN : Layer.UP;
         case Layer.UP: return clockwise ? Layer.BACK : Layer.FRONT;
         case Layer.DOWN: return clockwise ? Layer.FRONT : Layer.BACK;
+      }
+    }
+    if (axis === Axis.Y) {
+      switch (layer) {
+        case Layer.FRONT: return clockwise ? Layer.LEFT : Layer.RIGHT;
+        case Layer.BACK: return clockwise ? Layer.RIGHT : Layer.LEFT;
+        case Layer.LEFT: return clockwise ? Layer.BACK : Layer.FRONT;
+        case Layer.RIGHT: return clockwise ? Layer.FRONT : Layer.BACK;
+      }
+    }
+    if (axis === Axis.Z) {
+      switch (layer) {
+        case Layer.RIGHT: return clockwise ? Layer.UP : Layer.DOWN;
+        case Layer.LEFT: return clockwise ? Layer.DOWN : Layer.UP;
+        case Layer.UP: return clockwise ? Layer.RIGHT : Layer.LEFT;
+        case Layer.DOWN: return clockwise ? Layer.LEFT : Layer.RIGHT;
       }
     }
     return layer;
