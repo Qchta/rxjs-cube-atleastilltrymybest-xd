@@ -22,7 +22,7 @@ new P5(function (p5) {
     for (let x = -1; x <= 1; x++) {
       for (let y = -1; y <= 1; y++) {
         for (let z = -1; z <= 1; z++) {
-          // if (x !== -1) continue;
+          if (x !== 1) continue;
           cube.push(new Cubie(p5, x, y, z));
         }
       }
@@ -73,7 +73,7 @@ new P5(function (p5) {
 
   function rotate(layer: Layer, clockwise: boolean) {
     from(cube).pipe(
-      filter(qb => qb.currentState.layers.includes(layer)),
+      filter(qb => qb.currentState.layers.has(layer)),
 
     ).forEach(qb => qb.rotate(layer, clockwise));
   }
