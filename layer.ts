@@ -11,7 +11,7 @@ export enum Layer {
 }
 
 export namespace Layer {
-  function normal(layer: Layer, p5: P5): P5.Vector {
+  export function normal(layer: Layer, p5: P5): P5.Vector {
     switch (layer) {
       case Layer.UP: return p5.createVector(0, -1, 0);
       case Layer.DOWN: return p5.createVector(0, 1, 0);

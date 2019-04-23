@@ -75,7 +75,7 @@ new P5(function (p5) {
     from(cube).pipe(
       filter(qb => qb.currentState.layers.includes(layer)),
 
-    ).forEach(qb => qb.rotate(layerToAxis(layer), clockwise));
+    ).forEach(qb => qb.rotate(layer, clockwise));
   }
 
   function layerToAxis(layer: Layer): Axis {

@@ -23,6 +23,8 @@ export class Cubie {
     2: {axis: Axis.Z, inverted: false}
   };
 
+  private moves = [];
+
   constructor(
     private p5: P5,
     x: number,
@@ -50,9 +52,9 @@ export class Cubie {
 
   public draw() {
     this.p5.push();
-    this.p5.rotateX(this.currentState.rotX);
-    this.p5.rotateY(this.currentState.rotY);
-    this.p5.rotateZ(this.currentState.rotZ);
+    this.moves.forEach(move => {
+      this.p5.rotate(this.p5.HALF_PI, Layer.normal(move.layer, this.p5));
+    })
     this.p5.translate(this.initailState.x, this.initailState.y, this.initailState.z);
     this.p5.fill(0);
     this.p5.box(0.999);
@@ -61,27 +63,21 @@ export class Cubie {
     this.p5.pop();
   }
 
-  public rotate(axis: Axis, clockwise: boolean) {
-    console.log(this.currentState);
-    switch(this.axises[axis].axis) {
-      case Axis.X:
-        this.currentState = {...this.currentState, 
-          rotX: this.currentState.rotX + this.p5.HALF_PI * (clockwise ? 1 : -1),
-          layers: this.currentState.layers.map(layer => Layer.mapWithRotation(layer, axis, clockwise))
-        };
-        this.axises = {...this.axises,
-          1: this.axises[2],
-          2: this.axises[1]
-        }
-        break;
-      case Axis.Y:
-        this.currentState.rotY += this.p5.HALF_PI * (clockwise ^ this.axises.inverted ? 1 : -1); break;
-      case Axis.Z:
-        this.currentState.rotZ += this.p5.HALF_PI * (clockwise ^ this.axises.inverted ? 1 : -1); break;
-    }
-    console.log(this.currentState);
+  public rotate(layer: Layer, clockwise: boolean) {
+    this.moves.push({layer: layer, clockwise: clockwise});
+    this.currentState.layers = this.currentState.layers.map(l => Layer.mapWithRotation(l, this.layerToAxis(layer), clockwise));
   }
 
+  private layerToAxis(l: Layer): Axis{
+    switch(l){
+      case Layer.RIGHT:
+      case Layer.LEFT: return Axis.X;
+      case Layer.UP:
+      case Layer.DOWN: return Axis.Y;
+      case Layer.FRONT:
+      case Layer.BACK: return Axis.Z;
+    }
+  }
   
 
   private isOuter(cord: number, positive: boolean): boolean {
