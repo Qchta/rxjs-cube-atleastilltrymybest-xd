@@ -59,8 +59,11 @@ export namespace Layer {
     p5.pop();
   }
 
-  export function mapWithRotation(layer: Layer, axis: Axis, clockwise: boolean): Layer {
-    if (axis === Axis.X) {
+  export function mapWithRotation(layer: Layer, movingLayer: Layer, clockwise: boolean): Layer {
+    if(movingLayer === Layer.LEFT || movingLayer === Layer.DOWN || movingLayer === Layer.BACK) {
+      clockwise = !clockwise
+    }
+    if (movingLayer === Layer.RIGHT || movingLayer === Layer.LEFT) {
       switch (layer) {
         case Layer.FRONT: return clockwise ? Layer.UP : Layer.DOWN;
         case Layer.BACK: return clockwise ? Layer.DOWN : Layer.UP;
@@ -68,7 +71,7 @@ export namespace Layer {
         case Layer.DOWN: return clockwise ? Layer.FRONT : Layer.BACK;
       }
     }
-    if (axis === Axis.Y) {
+    if (movingLayer === Layer.UP || movingLayer === Layer.DOWN) {
       switch (layer) {
         case Layer.FRONT: return clockwise ? Layer.LEFT : Layer.RIGHT;
         case Layer.BACK: return clockwise ? Layer.RIGHT : Layer.LEFT;
@@ -76,7 +79,7 @@ export namespace Layer {
         case Layer.RIGHT: return clockwise ? Layer.FRONT : Layer.BACK;
       }
     }
-    if (axis === Axis.Z) {
+    if (movingLayer === Layer.FRONT || movingLayer === Layer.BACK) {
       switch (layer) {
         case Layer.RIGHT: return clockwise ? Layer.DOWN : Layer.UP;
         case Layer.LEFT: return clockwise ? Layer.UP : Layer.DOWN;

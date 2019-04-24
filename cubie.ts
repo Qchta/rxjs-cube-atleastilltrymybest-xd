@@ -68,23 +68,11 @@ export class Cubie {
     let newLayers: Map<Layer, Layer> = new Map();
     this.currentState.layers.forEach((value, key) => {
         newLayers.set(
-          Layer.mapWithRotation(key, this.layerToAxis(layer), clockwise), 
+          Layer.mapWithRotation(key, layer, clockwise), 
           value);
       });
     this.currentState.layers = newLayers;
   }
-
-  private layerToAxis(l: Layer): Axis {
-    switch (l) {
-      case Layer.RIGHT:
-      case Layer.LEFT: return Axis.X;
-      case Layer.UP:
-      case Layer.DOWN: return Axis.Y;
-      case Layer.FRONT:
-      case Layer.BACK: return Axis.Z;
-    }
-  }
-
 
   private isOuter(cord: number, positive: boolean): boolean {
     return cord === 1 * (positive ? 1 : -1);

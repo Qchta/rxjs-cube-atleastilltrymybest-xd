@@ -33,7 +33,7 @@ new P5(function (p5) {
   p5.draw = () => {
 
     if(cameraOn) p5.orbitControl();
-    p5.debugMode();
+    // p5.debugMode();
     p5.background(200);
     p5.scale(40);
     cube.forEach(qb => qb.draw());
