@@ -59,17 +59,16 @@ export class Cubie {
     this.p5.fill(0);
     this.p5.box(0.999);
     this.initailState.layers.forEach(layer => Layer.draw(layer, this.p5));
-    this.currentState.layers.forEach(layer => Layer.drawNormal(layer, this.p5));
     this.p5.pop();
   }
 
-  public rotate(layer: Layer, clockwise: boolean) {
-    this.moves.push({ layer: this.currentState.layers.get(layer), clockwise: clockwise });
+  public rotate(mvL: Layer, clockwise: boolean) {
+    this.moves.push({ layer: this.currentState.layers.get(mvL), clockwise: clockwise });
     let newLayers: Map<Layer, Layer> = new Map();
-    this.currentState.layers.forEach((value, key) => {
+    this.currentState.layers.forEach((posL, orgnL) => {
         newLayers.set(
-          Layer.mapWithRotation(key, layer, clockwise), 
-          value);
+          Layer.mapWithRotation(orgnL, mvL, clockwise), 
+          posL);
       });
     this.currentState.layers = newLayers;
   }
