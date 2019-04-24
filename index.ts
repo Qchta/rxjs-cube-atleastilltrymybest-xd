@@ -22,7 +22,7 @@ new P5(function (p5) {
     for (let x = -1; x <= 1; x++) {
       for (let y = -1; y <= 1; y++) {
         for (let z = -1; z <= 1; z++) {
-          if (x !== 1) continue;
+          // if (x !== 1) continue;
           cube.push(new Cubie(p5, x, y, z));
         }
       }
@@ -47,21 +47,21 @@ new P5(function (p5) {
       case 'F':
         rotate(Layer.FRONT, false); break;
       case 'b':
-        rotate(Layer.BACK, false); break;
-      case 'B':
         rotate(Layer.BACK, true); break;
+      case 'B':
+        rotate(Layer.BACK, false); break;
       case 'r':
         rotate(Layer.RIGHT, true); break;
       case 'R':
         rotate(Layer.RIGHT, false); break;
       case 'l':
-        rotate(Layer.LEFT, false); break;
-      case 'L':
         rotate(Layer.LEFT, true); break;
+      case 'L':
+        rotate(Layer.LEFT, false); break;
       case 'u':
-        rotate(Layer.UP, false); break;
-      case 'U':
         rotate(Layer.UP, true); break;
+      case 'U':
+        rotate(Layer.UP, false); break;
       case 'd':
         rotate(Layer.DOWN, true); break;
       case 'D':

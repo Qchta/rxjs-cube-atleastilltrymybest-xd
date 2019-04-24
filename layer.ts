@@ -50,11 +50,12 @@ export namespace Layer {
 
   export function drawNormal(layer: Layer, p5: P5): void {
     p5.push();
+    p5.fill(color(layer));
     let norm = normal(layer, p5);
     p5.translate(norm.div(2));
 
     p5.stroke(0.01);
-    p5.box(norm.x, norm.y, norm.z);
+    p5.box(p5.abs(norm.x) + 0.2, p5.abs(norm.y) + 0.2, p5.abs(norm.z) + 0.2);
     p5.pop();
   }
 
