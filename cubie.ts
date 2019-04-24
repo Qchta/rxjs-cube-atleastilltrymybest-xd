@@ -67,11 +67,6 @@ export class Cubie {
     this.moves.push({ layer: this.currentState.layers.get(layer), clockwise: clockwise });
     let newLayers: Map<Layer, Layer> = new Map();
     this.currentState.layers.forEach((value, key) => {
-        console.log('---');
-        console.log(key, value);
-        console.log(
-          Layer.mapWithRotation(key, this.layerToAxis(layer), clockwise), 
-          value);
         newLayers.set(
           Layer.mapWithRotation(key, this.layerToAxis(layer), clockwise), 
           value);

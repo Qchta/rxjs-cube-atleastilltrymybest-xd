@@ -78,8 +78,8 @@ export namespace Layer {
     }
     if (axis === Axis.Z) {
       switch (layer) {
-        case Layer.RIGHT: return clockwise ? Layer.UP : Layer.DOWN;
-        case Layer.LEFT: return clockwise ? Layer.DOWN : Layer.UP;
+        case Layer.RIGHT: return clockwise ? Layer.DOWN : Layer.UP;
+        case Layer.LEFT: return clockwise ? Layer.UP : Layer.DOWN;
         case Layer.UP: return clockwise ? Layer.RIGHT : Layer.LEFT;
         case Layer.DOWN: return clockwise ? Layer.LEFT : Layer.RIGHT;
       }
