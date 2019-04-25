@@ -14,6 +14,15 @@ new P5(function (p5) {
   let cube: Cubie[] = [];
   let cameraOn = true;
 
+  let rotX = 0;
+  let rotY = 0;
+
+  let rotXd = 0;
+  let rotYd = 0;
+
+  let mouseX = 0;
+  let mouseY = 0;
+
   p5.setup = () => {
     p5.createCanvas(400, 400, p5.WEBGL);
     p5.frameRate(30);
@@ -32,7 +41,29 @@ new P5(function (p5) {
 
   p5.draw = () => {
 
-    if(cameraOn) p5.orbitControl();
+    if (p5.keyIsDown(p5.LEFT_ARROW)) {
+      rotY -= 5;
+    }
+
+    if (p5.keyIsDown(p5.RIGHT_ARROW)) {
+      rotY += 5;
+    }
+
+    if (p5.keyIsDown(p5.UP_ARROW)) {
+      rotX += 5;
+    }
+
+    if (p5.keyIsDown(p5.DOWN_ARROW)) {
+      rotX -= 5;
+    }
+
+    let angleY = (rotY + rotYd) * 0.01;
+    let angleX = (rotX + rotXd) * 0.01;
+
+    p5.rotate(angleY, p5.createVector(0, 1, 0));
+    p5.rotate(angleX, p5.createVector(p5.cos(angleY), 0, p5.sin(angleY)));
+
+    //if(cameraOn) p5.orbitControl();
     // p5.debugMode();
     p5.background(200);
     p5.scale(40);
