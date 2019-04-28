@@ -1,14 +1,11 @@
-import P5 from 'p5'
-import { Axis } from './index'
+import * as THREE from 'three';
+
 import { Layer } from './layer'
 
 export interface CubieState {
   x: number,
   y: number,
   z: number,
-  rotX: number,
-  rotY: number,
-  rotZ: number,
   layers: Map<Layer, Layer>
 }
 
@@ -17,16 +14,10 @@ export class Cubie {
   private initailState: CubieState;
   public currentState: CubieState;
 
-  private axises: { [key: number]: { axis: Axis, inverted: boolean }; } = {
-    0: { axis: Axis.X, inverted: false },
-    1: { axis: Axis.Y, inverted: false },
-    2: { axis: Axis.Z, inverted: false }
-  };
-
   private moves = [];
+  private mesh: THREE.Object3D;
 
   constructor(
-    private p5: P5,
     x: number,
     y: number,
     z: number
@@ -42,39 +33,42 @@ export class Cubie {
       x: x,
       y: y,
       z: z,
-      rotX: 0,
-      rotY: 0,
-      rotZ: 0,
       layers: layers
     };
     this.currentState = { ...this.initailState };
   }
 
-  public draw() {
-    this.p5.push();
-    this.moves.forEach(move => {
-      this.p5.rotate(this.p5.HALF_PI * (move.clockwise ? 1 : -1), Layer.normal(move.layer, this.p5));
-    })
-    this.p5.translate(this.initailState.x, this.initailState.y, this.initailState.z);
-    this.p5.fill(0);
-    this.p5.box(0.999);
-    this.initailState.layers.forEach(layer => Layer.draw(layer, this.p5));
-    this.p5.pop();
-  }
-
   public rotate(mvL: Layer, clockwise: boolean) {
-    this.moves.push({ layer: this.currentState.layers.get(mvL), clockwise: clockwise });
+    this.mesh.rotateOnAxis(Layer.normal(this.currentState.layers.get(mvL)), clockwise ? Math.PI / 2 : -Math.PI / 2);
     let newLayers: Map<Layer, Layer> = new Map();
     this.currentState.layers.forEach((posL, orgnL) => {
-        newLayers.set(
-          Layer.mapWithRotation(orgnL, mvL, clockwise), 
-          posL);
-      });
+      newLayers.set(
+        Layer.mapWithRotation(orgnL, mvL, clockwise),
+        posL);
+    });
     this.currentState.layers = newLayers;
   }
 
   private isOuter(cord: number, positive: boolean): boolean {
     return cord === 1 * (positive ? 1 : -1);
+  }
+
+  public getMesh(): THREE.Object3D {
+    let pivot = new THREE.Mesh();
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: "black" });
+    let cube = new THREE.Mesh(geometry, material);
+    pivot.add(cube);
+    cube.position.x += this.initailState.x;
+    cube.position.y += this.initailState.y;
+    cube.position.z += this.initailState.z;
+
+    this.currentState.layers.forEach((layer) => {
+        cube.add(Layer.getMesh(layer));
+    });
+    this.mesh = pivot;
+    return pivot;
   }
 
 }

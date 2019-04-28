@@ -1,128 +1,82 @@
-import P5 from 'p5'
+import * as THREE from 'three';
+import { TrackballControls } from 'three-trackballcontrols-ts'
 import { of, from } from 'rxjs';
 import { filter } from 'rxjs/operators';
+
 import { Cubie } from './cubie'
+import { Cube } from './cube'
 import { Layer } from './layer'
+
 import './style.css'
 
-export enum Axis {
-  X, Y, Z
+
+const canvas: HTMLCanvasElement = document.querySelector("#canvas > canvas") as HTMLCanvasElement;
+
+let renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera();
+let controls = new TrackballControls(camera, renderer.domElement);
+
+let cube: Cube;
+
+configCamera();
+configControls();
+configRenderer();
+createCube();
+animate();
+
+function configCamera() {
+  camera.position.set(300, 300, 300);
+  camera.position.x = 7;
+  camera.position.y = 7;
+  camera.position.z = 7;
+
+  let axesHelper = new THREE.AxesHelper(5);
+  scene.add(axesHelper);
 }
 
-new P5(function (p5) {
+function configControls() {
+  controls.rotateSpeed = 5.0;
+}
 
-  let cube: Cubie[] = [];
-  let cameraOn = true;
+function configRenderer() {
+  renderer.setSize(400, 400);
+  renderer.setClearColor(new THREE.Color("gray"));
+}
 
-  let rotX = 0;
-  let rotY = 0;
+function createCube() {
+  cube = new Cube();
+  scene.add(cube.getMesh());
+}
 
-  let rotXd = 0;
-  let rotYd = 0;
+function animate() {
+  window.requestAnimationFrame(() => animate());
+  controls.update();
+  renderer.render(scene, camera);
+}
 
-  let mouseX = 0;
-  let mouseY = 0;
+function rotate(layer: Layer, clockwise: boolean) {
+  from(cube.cubies).pipe(
+    filter(qb => qb.currentState.layers.has(layer)),
 
-  p5.setup = () => {
-    p5.createCanvas(400, 400, p5.WEBGL);
-    p5.frameRate(30);
-    p5.smooth();
+  ).forEach(qb => qb.rotate(layer, clockwise));
+}
 
-    for (let x = -1; x <= 1; x++) {
-      for (let y = -1; y <= 1; y++) {
-        for (let z = -1; z <= 1; z++) {
-          // if (x !== 1) continue;
-          cube.push(new Cubie(p5, x, y, z));
-        }
-      }
-    }
-    // cube.push(new Cubie(p5, -1, -1, -1));
+document.addEventListener("keydown", onDocumentKeyDown, false);
+function onDocumentKeyDown(event) {
+  var keyCode = event.which;
+  switch (keyCode) {
+    case 70:
+      rotate(Layer.FRONT, true); break;
+    case 66:
+      rotate(Layer.BACK, true); break;
+    case 82:
+      rotate(Layer.RIGHT, true); break;
+    case 76:
+      rotate(Layer.LEFT, true); break;
+    case 85:
+      rotate(Layer.UP, true); break;
+    case 68:
+      rotate(Layer.DOWN, true); break;
   }
-
-  p5.draw = () => {
-
-    if (p5.keyIsDown(p5.LEFT_ARROW)) {
-      rotY -= 5;
-    }
-
-    if (p5.keyIsDown(p5.RIGHT_ARROW)) {
-      rotY += 5;
-    }
-
-    if (p5.keyIsDown(p5.UP_ARROW)) {
-      rotX += 5;
-    }
-
-    if (p5.keyIsDown(p5.DOWN_ARROW)) {
-      rotX -= 5;
-    }
-
-    let angleY = (rotY + rotYd) * 0.01;
-    let angleX = (rotX + rotXd) * 0.01;
-
-    p5.rotate(angleY, p5.createVector(0, 1, 0));
-    p5.rotate(angleX, p5.createVector(p5.cos(angleY), 0, p5.sin(angleY)));
-
-    //if(cameraOn) p5.orbitControl();
-    // p5.debugMode();
-    p5.background(200);
-    p5.scale(40);
-    cube.forEach(qb => qb.draw());
-
-  }
-
-  p5.keyPressed = () => {
-    switch (p5.key) {
-      case 'f':
-        rotate(Layer.FRONT, true); break;
-      case 'F':
-        rotate(Layer.FRONT, false); break;
-      case 'b':
-        rotate(Layer.BACK, true); break;
-      case 'B':
-        rotate(Layer.BACK, false); break;
-      case 'r':
-        rotate(Layer.RIGHT, true); break;
-      case 'R':
-        rotate(Layer.RIGHT, false); break;
-      case 'l':
-        rotate(Layer.LEFT, true); break;
-      case 'L':
-        rotate(Layer.LEFT, false); break;
-      case 'u':
-        rotate(Layer.UP, true); break;
-      case 'U':
-        rotate(Layer.UP, false); break;
-      case 'd':
-        rotate(Layer.DOWN, true); break;
-      case 'D':
-        rotate(Layer.DOWN, false); break;
-      case 'q':
-        cameraOn = !cameraOn
-    }
-  };
-
-  function rotate(layer: Layer, clockwise: boolean) {
-    from(cube).pipe(
-      filter(qb => qb.currentState.layers.has(layer)),
-
-    ).forEach(qb => qb.rotate(layer, clockwise));
-  }
-
-  function layerToAxis(layer: Layer): Axis {
-    switch (layer) {
-      case Layer.FRONT:
-      case Layer.BACK:
-        return Axis.Z;
-      case Layer.UP:
-      case Layer.DOWN:
-        return Axis.Y;
-      case Layer.LEFT:
-      case Layer.RIGHT:
-        return Axis.X;
-    }
-  }
-
-}, 'canvas')
-
-
+};

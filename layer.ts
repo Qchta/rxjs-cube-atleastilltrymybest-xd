@@ -1,4 +1,5 @@
-import P5 from 'p5'
+import * as THREE from 'three';
+
 import { Axis } from './index'
 
 export enum Layer {
@@ -11,56 +12,46 @@ export enum Layer {
 }
 
 export namespace Layer {
-  export function normal(layer: Layer, p5: P5): P5.Vector {
+  export function normal(layer: Layer): THREE.Vector3 {
     switch (layer) {
-      case Layer.UP: return p5.createVector(0, -1, 0);
-      case Layer.DOWN: return p5.createVector(0, 1, 0);
-      case Layer.LEFT: return p5.createVector(-1, 0, 0);
-      case Layer.RIGHT: return p5.createVector(1, 0, 0);
-      case Layer.FRONT: return p5.createVector(0, 0, 1);
-      case Layer.BACK: return p5.createVector(0, 0, -1);
+      case Layer.UP: return new THREE.Vector3(0, -1, 0);
+      case Layer.DOWN: return new THREE.Vector3(0, 1, 0);
+      case Layer.LEFT: return new THREE.Vector3(-1, 0, 0);
+      case Layer.RIGHT: return new THREE.Vector3(1, 0, 0);
+      case Layer.FRONT: return new THREE.Vector3(0, 0, 1);
+      case Layer.BACK: return new THREE.Vector3(0, 0, -1);
     }
   }
 
   function color(layer: Layer): string {
     switch (layer) {
-      case Layer.UP: return 'White';
-      case Layer.DOWN: return 'Yellow';
-      case Layer.LEFT: return 'Orange';
-      case Layer.RIGHT: return 'Red';
-      case Layer.FRONT: return 'Green';
-      case Layer.BACK: return 'DodgerBlue';
+      case Layer.UP: return 'white';
+      case Layer.DOWN: return 'yellow';
+      case Layer.LEFT: return 'orange';
+      case Layer.RIGHT: return 'red';
+      case Layer.FRONT: return 'green';
+      case Layer.BACK: return 'dodgerblue';
     }
   }
 
-  export function draw(layer: Layer, p5: P5): void {
-    p5.push();
-    p5.fill(color(layer));
-    let norm = normal(layer, p5);
-    p5.translate(norm.div(2));
-    if (p5.abs(norm.x) > 0) {
-      p5.rotateY(p5.HALF_PI);
-    } else if (p5.abs(norm.y) > 0) {
-      p5.rotateX(p5.HALF_PI);
+  export function getMesh(layer: Layer): THREE.Object3D {
+    let nrml = normal(layer);
+    const geometry = new THREE.PlaneGeometry(.9, .9);
+    const material = new THREE.MeshBasicMaterial({ color: color(layer), side: THREE.DoubleSide });
+    let cube = new THREE.Mesh(geometry, material);
+    cube.position.add(nrml.divideScalar(1.99));
+    
+    if (Math.abs(nrml.x) > 0) {
+      cube.rotateY(Math.PI / 2);
+    } else if (Math.abs(nrml.y) > 0) {
+      cube.rotateX(Math.PI / 2);
     }
-    p5.noStroke();
-    p5.plane(1, 1);
-    p5.pop();
-  }
 
-  export function drawNormal(layer: Layer, p5: P5): void {
-    p5.push();
-    p5.fill(color(layer));
-    let norm = normal(layer, p5);
-    p5.translate(norm.div(2));
-
-    p5.stroke(0.01);
-    p5.box(p5.abs(norm.x) + 0.2, p5.abs(norm.y) + 0.2, p5.abs(norm.z) + 0.2);
-    p5.pop();
+    return cube;
   }
 
   export function mapWithRotation(layer: Layer, movingLayer: Layer, clockwise: boolean): Layer {
-    if(movingLayer === Layer.LEFT || movingLayer === Layer.DOWN || movingLayer === Layer.BACK) {
+    if (movingLayer === Layer.LEFT || movingLayer === Layer.DOWN || movingLayer === Layer.BACK) {
       clockwise = !clockwise
     }
     if (movingLayer === Layer.RIGHT || movingLayer === Layer.LEFT) {
