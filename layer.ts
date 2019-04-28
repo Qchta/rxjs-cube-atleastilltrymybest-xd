@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 
-import { Axis } from './index'
-
 export enum Layer {
   UP,
   DOWN,
